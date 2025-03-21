@@ -1,0 +1,6 @@
+@FelipeMinimalApiTemplate_HostAddress = http://localhost:5001
+
+GET {{FelipeMinimalApiTemplate_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
