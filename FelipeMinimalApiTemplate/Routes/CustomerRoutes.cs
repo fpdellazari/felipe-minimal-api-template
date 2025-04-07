@@ -28,9 +28,9 @@ public static class CustomerRoutes
             return customer is null ? Results.NotFound() : Results.Ok(customer);
         });
 
-        route.MapPost("", async (CreateCustomerDTO createCustomerDTO, ApplicationDbContext context, IValidator<CreateCustomerDTO> validator) =>
+        route.MapPost("", async (CreateUpdateCustomerDTO createUpdateCustomer, ApplicationDbContext context, IValidator<CreateUpdateCustomerDTO> validator) =>
         {
-            var validationResult = await validator.ValidateAsync(createCustomerDTO);
+            var validationResult = await validator.ValidateAsync(createUpdateCustomer);
 
             if (!validationResult.IsValid)
             {
@@ -39,9 +39,9 @@ public static class CustomerRoutes
 
             var customer = new Customer()
             {
-                Name = createCustomerDTO.Name,
-                Age = createCustomerDTO.Age,
-                Email = createCustomerDTO.Email
+                Name = createUpdateCustomer.Name,
+                Age = createUpdateCustomer.Age,
+                Email = createUpdateCustomer.Email
             };
 
             await context.Customers.AddAsync(customer);
@@ -50,9 +50,9 @@ public static class CustomerRoutes
             return Results.Ok(customer);
         });
 
-        route.MapPut("{id:guid}", async (Guid id, UpdateCustomerDTO updateCustomerDTO, ApplicationDbContext context, IValidator<UpdateCustomerDTO> validator) =>
+        route.MapPut("{id:guid}", async (Guid id, CreateUpdateCustomerDTO createUpdateCustomer, ApplicationDbContext context, IValidator<CreateUpdateCustomerDTO> validator) =>
         {
-            var validationResult = await validator.ValidateAsync(updateCustomerDTO);
+            var validationResult = await validator.ValidateAsync(createUpdateCustomer);
 
             if (!validationResult.IsValid)
             {
@@ -63,17 +63,17 @@ public static class CustomerRoutes
 
             if (customer is null) return Results.NotFound("Cliente não encontrado.");
 
-            customer.Name = updateCustomerDTO.Name;
-            customer.Age = updateCustomerDTO.Age;
-            customer.Email = updateCustomerDTO.Email;
+            customer.Name = createUpdateCustomer.Name;
+            customer.Age = createUpdateCustomer.Age;
+            customer.Email = createUpdateCustomer.Email;
             await context.SaveChangesAsync();
 
             return Results.Ok(customer);
         });
 
-        route.MapPatch("{id:guid}", async (Guid id, PartialUpdateCustomerDTO partialUpdateCustomerDTO, ApplicationDbContext context, IValidator<PartialUpdateCustomerDTO> validator) =>
+        route.MapPatch("{id:guid}", async (Guid id, PartialUpdateCustomerDTO partialUpdateCustomer, ApplicationDbContext context, IValidator<PartialUpdateCustomerDTO> validator) =>
         {
-            var validationResult = await validator.ValidateAsync(partialUpdateCustomerDTO);
+            var validationResult = await validator.ValidateAsync(partialUpdateCustomer);
 
             if (!validationResult.IsValid)
             {
@@ -84,9 +84,9 @@ public static class CustomerRoutes
 
             if (customer is null) return Results.NotFound("Cliente não encontrado.");
 
-            if (partialUpdateCustomerDTO.Name is not null) customer.Name = partialUpdateCustomerDTO.Name;
-            if (partialUpdateCustomerDTO.Email is not null) customer.Email = partialUpdateCustomerDTO.Email;
-            if (partialUpdateCustomerDTO.Age is not null) customer.Age = (int)partialUpdateCustomerDTO.Age;
+            if (partialUpdateCustomer.Name is not null) customer.Name = partialUpdateCustomer.Name;
+            if (partialUpdateCustomer.Email is not null) customer.Email = partialUpdateCustomer.Email;
+            if (partialUpdateCustomer.Age is not null) customer.Age = (int)partialUpdateCustomer.Age;
 
             await context.SaveChangesAsync();
 

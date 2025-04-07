@@ -18,8 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 // Validadores com Fluent Validation
-builder.Services.AddScoped<IValidator<CreateCustomerDTO>, CreateCustomerValidator>();
-builder.Services.AddScoped<IValidator<UpdateCustomerDTO>, UpdateCustomerValidator>();
+builder.Services.AddScoped<IValidator<CreateUpdateCustomerDTO>, CreateUpdateCustomerValidator>();
 builder.Services.AddScoped<IValidator<PartialUpdateCustomerDTO>, PartialUpdateCustomerValidator>();
 
 var app = builder.Build();
